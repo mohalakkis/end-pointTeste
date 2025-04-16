@@ -6,7 +6,6 @@ import com.bootcampW22.EjercicioGlobal.exception.BadRequest;
 import com.bootcampW22.EjercicioGlobal.exception.NotFoundException;
 import com.bootcampW22.EjercicioGlobal.repository.IVehicleRepository;
 import com.bootcampW22.EjercicioGlobal.repository.VehicleRepositoryImpl;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -84,6 +83,16 @@ public class VehicleServiceImpl implements IVehicleService{
         return vehicles.stream()
                 .map(this::convertVehicleToDto)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<VehicleDto> filterByTransmission(String transmission) {
+        List<Vehicle> VehicleByTransmission = vehicleRepository.filterbytrasmissontype(transmission);
+
+        if (VehicleByTransmission.isEmpty()){
+            throw new NotFoundException("Nenhum carro com esse cambio encontrado");
+        }
+        return VehicleByTransmission.stream().map(this::convertVehicleToDto).collect(Collectors.toList());
     }
 
     private VehicleDto convertVehicleToDto(Vehicle v){

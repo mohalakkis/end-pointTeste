@@ -50,6 +50,15 @@ public class VehicleController {
 
     }
 
+    @GetMapping("/vehicles/transmission/{transmission}")
+    public ResponseEntity<List<VehicleDto>> filterByTrasmissionType(@PathVariable String transmission) {
+        List<VehicleDto> vehicles = vehicleService.filterByTransmission(transmission);
+
+        return new ResponseEntity<>(vehicles, HttpStatus.OK);
+
+    }
+
+
 
 
 }

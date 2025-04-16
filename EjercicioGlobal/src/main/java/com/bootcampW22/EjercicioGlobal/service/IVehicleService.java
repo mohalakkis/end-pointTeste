@@ -15,5 +15,7 @@ public interface IVehicleService {
 
     List<VehicleDto> addVehicle(VehicleDto vehicle);
 
+    List<VehicleDto> filterByTransmission(String transmission);
+
 
 }
