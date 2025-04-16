@@ -56,6 +56,14 @@ public class VehicleServiceImpl implements IVehicleService{
         return totalSpeed / vehicles.size();
     }
 
+    @Override
+    public List<VehicleDto> addnewVehicle(Vehicle vehicle) {
+        vehicleRepository.addNewVehicle(vehicle);
+
+        List<Vehicle> vehicles = vehicleRepository.findAll();
+        return vehicles.stream().map(this::convertVehicleToDto).collect(Collectors.toList());
+    }
+
     private VehicleDto convertVehicleToDto(Vehicle v){
         return new VehicleDto(
                 v.getId(),

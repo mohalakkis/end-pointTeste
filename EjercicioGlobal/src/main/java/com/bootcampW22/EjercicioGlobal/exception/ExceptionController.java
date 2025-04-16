@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import java.io.IOException;
+import java.net.ConnectException;
 
 @ControllerAdvice
 public class ExceptionController {
@@ -15,6 +16,18 @@ public class ExceptionController {
     public ResponseEntity<?> notFound(NotFoundException e){
         ExceptionDto exceptionDto = new ExceptionDto(e.getMessage());
         return new ResponseEntity<>(exceptionDto, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(ConnectException.class)
+    public ResponseEntity<?> conflict(NotFoundException e) {
+        ExceptionDto exceptionDto = new ExceptionDto(e.getMessage());
+        return new ResponseEntity<>(exceptionDto, HttpStatus.CONFLICT);
+    }
+
+    @ExceptionHandler(BadRequest.class)
+    public ResponseEntity<?> badRequest(BadRequest e) {
+        ExceptionDto exceptionDto = new ExceptionDto(e.getMessage());
+        return new ResponseEntity<>(exceptionDto, HttpStatus.BAD_REQUEST);
     }
 
 

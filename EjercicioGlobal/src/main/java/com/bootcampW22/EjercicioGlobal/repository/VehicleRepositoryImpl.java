@@ -1,5 +1,6 @@
 package com.bootcampW22.EjercicioGlobal.repository;
 
+import com.bootcampW22.EjercicioGlobal.dto.VehicleDto;
 import com.bootcampW22.EjercicioGlobal.entity.Vehicle;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -33,6 +34,14 @@ public class VehicleRepositoryImpl implements IVehicleRepository{
                 .filter(v -> v.getBrand().equalsIgnoreCase(brand))
                 .collect(Collectors.toList());
          }
+
+    @Override
+    public void addNewVehicle(Vehicle vehicle) {
+        listOfVehicles.add(vehicle);
+    }
+
+
+
 
     private void loadDataBase() throws IOException {
         File file;
