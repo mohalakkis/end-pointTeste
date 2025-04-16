@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
 import java.io.IOException;
 import java.net.ConnectException;
@@ -18,8 +19,8 @@ public class ExceptionController {
         return new ResponseEntity<>(exceptionDto, HttpStatus.NOT_FOUND);
     }
 
-    @ExceptionHandler(ConnectException.class)
-    public ResponseEntity<?> conflict(NotFoundException e) {
+    @ExceptionHandler(ConflictException.class)
+    public ResponseEntity<?> conflict(ConflictException e) {
         ExceptionDto exceptionDto = new ExceptionDto(e.getMessage());
         return new ResponseEntity<>(exceptionDto, HttpStatus.CONFLICT);
     }

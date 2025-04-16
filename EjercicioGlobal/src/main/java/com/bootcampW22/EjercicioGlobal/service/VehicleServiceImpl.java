@@ -2,6 +2,7 @@ package com.bootcampW22.EjercicioGlobal.service;
 
 import com.bootcampW22.EjercicioGlobal.dto.VehicleDto;
 import com.bootcampW22.EjercicioGlobal.entity.Vehicle;
+import com.bootcampW22.EjercicioGlobal.exception.BadRequest;
 import com.bootcampW22.EjercicioGlobal.exception.NotFoundException;
 import com.bootcampW22.EjercicioGlobal.repository.IVehicleRepository;
 import com.bootcampW22.EjercicioGlobal.repository.VehicleRepositoryImpl;
@@ -36,32 +37,53 @@ public class VehicleServiceImpl implements IVehicleService{
 
         List<Vehicle> vehicles = vehicleRepository.getByBrand(brand);
 
-        double totalSpeed = 0;
-
         if (vehicles.isEmpty()) {
             throw new NotFoundException("nenhum carro encontrado");
         }
+        return vehicles.stream().mapToDouble(v -> Double.parseDouble(v.getMax_speed())).average().orElse(0.0);
 
-        for (Vehicle vehicle : vehicles) {
-            try {
-                double maxSpeed = Double.parseDouble(vehicle.getMax_speed());
-                totalSpeed += maxSpeed;
-            } catch (NumberFormatException e) {
-                continue;
-            }
-        }
-
-
-
-        return totalSpeed / vehicles.size();
     }
 
     @Override
-    public List<VehicleDto> addnewVehicle(Vehicle vehicle) {
+    public double getCapacity(String brand) {
+        List<Vehicle> vehicle = vehicleRepository.getByBrand(brand);
+
+        if (vehicle.isEmpty()) {
+            throw new NotFoundException("Nao foi encontrado nenhuma marca");
+        }
+
+        return vehicle.stream().mapToDouble(v -> v.getPassengers()).average().orElse(0.0);
+    }
+
+
+    @Override
+    public List<VehicleDto> addVehicle(VehicleDto vehicleDto) {
+        if (vehicleDto == null) {
+            throw new BadRequest("Nenhum veiculo.");
+        }
+
+        Vehicle vehicle = new Vehicle(
+                vehicleDto.id(),
+                vehicleDto.brand(),
+                vehicleDto.model(),
+                vehicleDto.registration(),
+                vehicleDto.color(),
+                vehicleDto.year(),
+                vehicleDto.max_speed(),
+                vehicleDto.passengers(),
+                vehicleDto.fuel_type(),
+                vehicleDto.transmission(),
+                vehicleDto.length(),
+                vehicleDto.width(),
+                vehicleDto.weight()
+        );
+
         vehicleRepository.addNewVehicle(vehicle);
 
         List<Vehicle> vehicles = vehicleRepository.findAll();
-        return vehicles.stream().map(this::convertVehicleToDto).collect(Collectors.toList());
+        return vehicles.stream()
+                .map(this::convertVehicleToDto)
+                .collect(Collectors.toList());
     }
 
     private VehicleDto convertVehicleToDto(Vehicle v){

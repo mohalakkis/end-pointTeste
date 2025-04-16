@@ -28,8 +28,6 @@ public class VehicleRepositoryImpl implements IVehicleRepository{
 
     @Override
     public List<Vehicle> getByBrand(String brand) {
-
-
         return listOfVehicles.stream()
                 .filter(v -> v.getBrand().equalsIgnoreCase(brand))
                 .collect(Collectors.toList());
@@ -39,7 +37,6 @@ public class VehicleRepositoryImpl implements IVehicleRepository{
     public void addNewVehicle(Vehicle vehicle) {
         listOfVehicles.add(vehicle);
     }
-
 
 
 

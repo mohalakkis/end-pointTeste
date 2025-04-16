@@ -10,6 +10,10 @@ public interface IVehicleService {
 
     double getByBrandSpeed(String brand);
 
-    List<VehicleDto> addnewVehicle(Vehicle vehicle);
+    double getCapacity(String brand);
+
+
+    List<VehicleDto> addVehicle(VehicleDto vehicle);
+
 
 }

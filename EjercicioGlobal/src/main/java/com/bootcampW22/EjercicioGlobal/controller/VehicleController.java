@@ -3,7 +3,6 @@ package com.bootcampW22.EjercicioGlobal.controller;
 import com.bootcampW22.EjercicioGlobal.dto.VehicleDto;
 import com.bootcampW22.EjercicioGlobal.entity.Vehicle;
 import com.bootcampW22.EjercicioGlobal.exception.BadRequest;
-import com.bootcampW22.EjercicioGlobal.exception.NotFoundException;
 import com.bootcampW22.EjercicioGlobal.service.IVehicleService;
 import com.bootcampW22.EjercicioGlobal.service.VehicleServiceImpl;
 import org.springframework.http.HttpStatus;
@@ -34,23 +33,23 @@ public class VehicleController {
     }
 
     @PostMapping("/vehicles")
-    public ResponseEntity<?> addVehicle(@RequestBody Vehicle vehicle) {
-        List<?> addCars = vehicleService.addnewVehicle(vehicle);
-
-        if (addCars.isEmpty()){
-            throw new BadRequest("Dados do veículo mal formatados ou incompletos.");
-
+    public ResponseEntity<VehicleDto> addVehicle(@RequestBody VehicleDto vehicleDto) {
+        if (vehicleDto == null) {
+            throw new BadRequest("sem dados");
         }
+        List<VehicleDto> addCars = vehicleService.addVehicle(vehicleDto);
 
-        if (vehicle == null || vehicle.getId() == null || vehicle.getId() <= 0 ) {
-            throw new BadRequest("Dados do veículo mal formatados ou incompletos.");
-        }
+        return new ResponseEntity<>(addCars.get(addCars.size() - 1), HttpStatus.CREATED);
+    }
 
+    @GetMapping("/vehicles/average_capacity/brand/{brand}")
+    public ResponseEntity<?> filtorByCapacity(@PathVariable String brand) {
+        Double mediaCapacity = vehicleService.getCapacity(brand);
 
-
-
-        return new ResponseEntity<>(addCars, HttpStatus.CREATED);
+        return new ResponseEntity<>(mediaCapacity, HttpStatus.OK);
 
     }
+
+
 
 }
